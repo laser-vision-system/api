@@ -1,0 +1,34 @@
+[package]
+name = "server-edge-datatypes"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1" , features = [
+	"derive"
+] }
+
+[lints.rust]
+unsafe_code = "deny" # We should avoid using unsafe code as much as possible.
+
+[lints.rustdoc]
+missing_crate_level_docs = "warn"
+broken_intra_doc_links = "warn"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1} # This should be upgraded to forbid in the future.
+# Lints from the pedantic group:
+missing_errors_doc = "allow" # Consider upgrading in the future.
+missing_panics_doc = "allow" # Consider upgrading in the future.
+duration_suboptimal_units = "allow"
+
+# Lints from the restriction group:
+else_if_without_else = "warn"
+empty_structs_with_brackets = "allow" # This should be upgraded to warn in the future.
+indexing_slicing = "warn" # This may be upgraded to forbid in the future.
+missing_asserts_for_indexing = "warn" # Contention with the above.
+must_use_candidate = "allow" # Consider upgrading in the future.
+pattern_type_mismatch = "allow" # Consider upgrading in the future.
+print_stderr = "allow" # This should be upgraded to forbid in the future.
+unwrap_used = "warn" # This should be upgraded to forbid in the future.
+# TODO Add more from https://rust-lang.github.io/rust-clippy/master/index.html?groups=restriction

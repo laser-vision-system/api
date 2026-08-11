@@ -1,0 +1,24 @@
+# https://rust-lang.github.io/rustfmt/
+
+# Stable options
+hard_tabs = true
+match_block_trailing_comma = true
+#max_width = 100
+newline_style = "Unix"
+use_field_init_shorthand = true
+use_try_shorthand = true
+
+# Unstable options (nightly only)
+unstable_features = true
+#comment_width = 100
+empty_item_single_line = false
+format_code_in_doc_comments = true
+float_literal_trailing_zero = "IfNoPostfix"
+group_imports = "StdExternalCrate"
+hex_literal_case = "Upper"
+imports_granularity = "Crate"
+imports_layout = "Vertical"
+normalize_comments = true
+normalize_doc_attributes = true
+reorder_impl_items = true
+wrap_comments = true
