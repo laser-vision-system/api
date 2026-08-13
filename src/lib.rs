@@ -27,20 +27,20 @@ pub struct ImageAnalysis {
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
 pub struct RegisterCamera {
-    cameras: HashMap<u32, String>
+    pub cameras: HashMap<u32, String>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
 pub struct UnregisterCamera {
-    camera_id: u32
+    pub camera_id: u32
 }
 
 // Server -> Edge
 #[derive(Serialize, Deserialize)]
 pub struct SetNameCamera {
-    camera_id: u32,
-    name: String
+    pub camera_id: u32,
+    pub name: String
 }
 
 // Functions for Mutexing pub structs if needed, currently we do not see a use
