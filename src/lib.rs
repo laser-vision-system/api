@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 use std::sync::Mutex;
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
 struct Image {
     pub camera_id: i32,
 
@@ -10,6 +13,7 @@ fn image_mutex() -> Mutex<Image> {
     });
     return mutex;
 }
+#[derive(Serialize, Deserialize)]
 struct Configuration {
     pub camera_id: i32,
     pub configuration: String
@@ -21,7 +25,7 @@ fn configuration_mutex() -> Mutex<Configuration> {
     });
     return mutex;
 }
-
+#[derive(Serialize, Deserialize)]
 struct CameraInfo {
     pub intensity: f32,
     pub deviation: f32
@@ -33,6 +37,7 @@ struct CameraInfo {
      });
      return mutex
  }
+#[derive(Serialize, Deserialize)]
 struct RegisterCameras {
     cameras: HashMap<i32, String>
 }
@@ -42,7 +47,7 @@ fn register_cameras_mutex() -> Mutex<RegisterCameras> {
     });
     return mutex
 }
-
+#[derive(Serialize, Deserialize)]
 struct UnregisterCameras {
     camera_id: i32
 }
@@ -53,6 +58,7 @@ fn unregister_cameras_mutex() -> Mutex<UnregisterCameras> {
     return mutex
 
 }
+#[derive(Serialize, Deserialize)]
 struct NameCamera {
     camera_id: i32,
     name: String
