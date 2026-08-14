@@ -20,6 +20,7 @@ struct Configuration {
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
 struct ImageAnalysis {
+    pub camera_id: u32,
     pub intensity: f32,
     pub deviation: f32
 }
@@ -60,6 +61,7 @@ fn configuration_mutex() -> Mutex<Configuration> {
 }
  fn camera_info_mutex() -> Mutex<ImageAnalysis> {
      let mutex: Mutex<ImageAnalysis> = Mutex::new(ImageAnalysis {
+         camera_id: 0,
          intensity: 0.0,
          deviation: 0.0
      });
