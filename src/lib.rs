@@ -2,32 +2,52 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 
-// Edge -> Server
+/**
+
+# Camera list commands:
+Commands related to keeping a full list of all cameras.
+
+* \* ListCameras (GUI -> Server)
+* ListOfCameras (Server -> GUI)
+* CameraDisconnected (Server -> GUI)
+* SetNameCamera (GUI -> Server -> Edge)
+* RegisterCameras (Edge -> Server)
+* UnregisterCamera (Edge -> Server)
+
+*/
+
+// Server -> GUI.
+// GUI can request this with ListCameras
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Image {
+pub struct ListOfCameras {
+    pub cameras: HashMap<(u32, u32), String>, // hashmap has a structure of <(conn_id,camera_id), name>
+}
+
+// Server -> GUI.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CameraDisconnected {
+    pub conn_id: u32,
     pub camera_id: u32,
-    // TBD data type for images
+}
+
+// GUI -> Server
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GUISetNameCamera {
+    pub conn_id: u32,
+    pub camera_id: u32,
+    pub name: String
+}
+
+// Server -> Edge
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SetNameCamera {
+    pub camera_id: u32,
+    pub name: String
 }
 
 // Edge -> Server
-// Server <- Edge
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Configuration {
-    pub camera_id: u32,
-    pub configuration: String
-}
-
-// Edge -> Server
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ImageAnalysis {
-    pub camera_id: u32,
-    pub intensity: f32,
-    pub deviation: f32
-}
-
-// Edge -> Server
-#[derive(Serialize, Deserialize, Debug)]
-pub struct RegisterCamera {
+pub struct RegisterCameras {
     pub cameras: HashMap<u32, String>
 }
 
@@ -37,12 +57,111 @@ pub struct UnregisterCamera {
     pub camera_id: u32
 }
 
+/**
+
+## Image viewing commands:
+Commands related directly to the GUI receiving 'video' from a camera
+
+* Image(tbd)(Edge -> Server -> GUI)
+* StartViewingCamera (GUI -> Server -> Edge)
+* StopViewingCamera (GUI -> Server -> Edge)
+
+*/
+
+// Edge -> Server
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Image {
+    pub camera_id: u32,
+    // TBD data type for images
+}
+
+// GUI -> Server
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StartViewingCamera {
+    pub conn_id: u32,
+    pub camera_id: u32,
+}
+
+// Server -> Edge: Tells the edge to stop sending the camera feed. Only sent when no more GUIs are watching the given camera feed
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StopViewingCamera {
+    pub camera_id: u32,
+}
+/**
+
+## Configuration Commands:
+Commands related to displaying or altering the configuration of a camera
+
+* ViewCameraConfig (Edge -> Server -> GUI)
+* Configuration (Edge -> Server -> GUI) - Displaying camera config
+* Configuration (GUI -> Server -> Edge) - Updating camera config
+
+*/
+
+
+// GUI -> Server. conn_id is an edge id.
+// Server -> Edge. conn_id is the GUI id to be sent back with Configuration.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ViewCameraConfig {
+    pub conn_id: u32,
+    pub camera_id: u32,
+}
+
+// Edge -> Server: Sending current config. conn_id is a GUI id.
+// Edge <- Server: Updating current config. conn_id is irrelevant.
+// GUI -> Server: Updating current config. conn_id is an edge id
+// GUI <- Server: Displaying current config. conn_id is an edge id
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Configuration {
+    pub conn_id: u32,
+    pub camera_id: u32,
+    pub configuration: String
+}
+
+// GUI -> Server
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GUISetpoint {
+    pub conn_id: u32,
+    pub camera_id: u32,
+}
+
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug)]
-pub struct SetNameCamera {
+pub struct Setpoint {
     pub camera_id: u32,
-    pub name: String
 }
+
+
+/**
+
+## Live data:
+Constant stream of camera data from the edge to the GUI. May later include alerts if we decide GUI is not responsible for detecting such.
+
+* ImageAnalysis (Edge -> Server -> GUI)
+
+*/
+
+// Edge -> Server.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ImageAnalysis {
+    pub camera_id: u32,
+    pub intensity: f32,
+    pub deviation: f32
+}
+
+// Server -> GUI
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GUIImageAnalysis {
+    pub conn_id: u32,
+    pub camera_id: u32,
+    pub intensity: f32,
+    pub deviation: f32
+}
+
+
+
+
+
 
 // Functions for Mutexing pub structs if needed, currently we do not see a use
 
@@ -54,10 +173,11 @@ pub fn image_mutex() -> Mutex<Image> {
 }
 pub fn configuration_mutex() -> Mutex<Configuration> {
     let mutex: Mutex<Configuration> = Mutex::new( Configuration{
+        conn_id: 0,
         camera_id: 0,
         configuration: "".to_string()
     });
-    return mutex;
+    mutex
 }
  pub fn camera_info_mutex() -> Mutex<ImageAnalysis> {
      let mutex: Mutex<ImageAnalysis> = Mutex::new(ImageAnalysis {
@@ -65,24 +185,24 @@ pub fn configuration_mutex() -> Mutex<Configuration> {
          intensity: 0.0,
          deviation: 0.0
      });
-     return mutex
+     mutex
  }
-pub fn register_cameras_mutex() -> Mutex<RegisterCamera> {
-    let mutex: Mutex<RegisterCamera> = Mutex::new(RegisterCamera {
+pub fn register_cameras_mutex() -> Mutex<RegisterCameras> {
+    let mutex: Mutex<RegisterCameras> = Mutex::new(RegisterCameras {
         cameras: HashMap::new()
     });
-    return mutex
+    mutex
 }
 pub fn unregister_cameras_mutex() -> Mutex<UnregisterCamera> {
     let mutex: Mutex<UnregisterCamera> = Mutex::new(UnregisterCamera {
         camera_id: 0
     });
-    return mutex
+    mutex
 }
 pub fn name_camera_mutex() -> Mutex<SetNameCamera> {
     let mutex: Mutex<SetNameCamera> = Mutex::new(SetNameCamera {
         camera_id: 0,
         name: "".to_string()
     });
-    return mutex
+    mutex
 }
