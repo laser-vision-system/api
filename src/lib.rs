@@ -19,7 +19,7 @@ pub struct Configuration {
 
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
-struct ImageAnalysis {
+pub struct ImageAnalysis {
     pub camera_id: u32,
     pub intensity: f32,
     pub deviation: f32
