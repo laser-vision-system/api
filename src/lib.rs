@@ -3,7 +3,7 @@ use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 
 // Edge -> Server
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Image {
     pub camera_id: u32,
     // TBD data type for images
@@ -11,14 +11,14 @@ pub struct Image {
 
 // Edge -> Server
 // Server <- Edge
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Configuration {
     pub camera_id: u32,
     pub configuration: String
 }
 
 // Edge -> Server
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ImageAnalysis {
     pub camera_id: u32,
     pub intensity: f32,
@@ -26,19 +26,19 @@ pub struct ImageAnalysis {
 }
 
 // Edge -> Server
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RegisterCamera {
     pub cameras: HashMap<u32, String>
 }
 
 // Edge -> Server
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct UnregisterCamera {
     pub camera_id: u32
 }
 
 // Server -> Edge
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SetNameCamera {
     pub camera_id: u32,
     pub name: String
