@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
-struct Image {
+pub struct Image {
     pub camera_id: u32,
     // TBD data type for images
 }
@@ -12,7 +12,7 @@ struct Image {
 // Edge -> Server
 // Server <- Edge
 #[derive(Serialize, Deserialize)]
-struct Configuration {
+pub struct Configuration {
     pub camera_id: u32,
     pub configuration: String
 }
@@ -27,39 +27,39 @@ struct ImageAnalysis {
 
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
-struct RegisterCamera {
-    cameras: HashMap<u32, String>
+pub struct RegisterCamera {
+    pub cameras: HashMap<u32, String>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize)]
-struct UnregisterCamera {
-    camera_id: u32
+pub struct UnregisterCamera {
+    pub camera_id: u32
 }
 
 // Server -> Edge
 #[derive(Serialize, Deserialize)]
-struct SetNameCamera {
-    camera_id: u32,
-    name: String
+pub struct SetNameCamera {
+    pub camera_id: u32,
+    pub name: String
 }
 
-// Functions for Mutexing structs if needed, currently we do not see a use
+// Functions for Mutexing pub structs if needed, currently we do not see a use
 
-fn image_mutex() -> Mutex<Image> {
+pub fn image_mutex() -> Mutex<Image> {
     let mutex: Mutex<Image> = Mutex::new(Image {
         camera_id: 0
     });
     return mutex;
 }
-fn configuration_mutex() -> Mutex<Configuration> {
+pub fn configuration_mutex() -> Mutex<Configuration> {
     let mutex: Mutex<Configuration> = Mutex::new( Configuration{
         camera_id: 0,
         configuration: "".to_string()
     });
     return mutex;
 }
- fn camera_info_mutex() -> Mutex<ImageAnalysis> {
+ pub fn camera_info_mutex() -> Mutex<ImageAnalysis> {
      let mutex: Mutex<ImageAnalysis> = Mutex::new(ImageAnalysis {
          camera_id: 0,
          intensity: 0.0,
@@ -67,19 +67,19 @@ fn configuration_mutex() -> Mutex<Configuration> {
      });
      return mutex
  }
-fn register_cameras_mutex() -> Mutex<RegisterCamera> {
+pub fn register_cameras_mutex() -> Mutex<RegisterCamera> {
     let mutex: Mutex<RegisterCamera> = Mutex::new(RegisterCamera {
         cameras: HashMap::new()
     });
     return mutex
 }
-fn unregister_cameras_mutex() -> Mutex<UnregisterCamera> {
+pub fn unregister_cameras_mutex() -> Mutex<UnregisterCamera> {
     let mutex: Mutex<UnregisterCamera> = Mutex::new(UnregisterCamera {
         camera_id: 0
     });
     return mutex
 }
-fn name_camera_mutex() -> Mutex<SetNameCamera> {
+pub fn name_camera_mutex() -> Mutex<SetNameCamera> {
     let mutex: Mutex<SetNameCamera> = Mutex::new(SetNameCamera {
         camera_id: 0,
         name: "".to_string()
