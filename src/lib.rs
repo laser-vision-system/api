@@ -2,6 +2,15 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 
+
+// Server -> GUI
+// Server -> Edge
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ErrorMSG {
+    pub code: String,
+    pub message: String,
+}
+
 /**
 
 # Camera list commands:
@@ -13,6 +22,10 @@ Commands related to keeping a full list of all cameras.
 * SetNameCamera (GUI -> Server -> Edge)
 * RegisterCameras (Edge -> Server)
 * UnregisterCamera (Edge -> Server)
+* ForgetCamera (round trip). When a server becomes disconnected, the client can send one of these commands,
+                             and if the response comes back with 'confirm' as true, it means the camera can be
+                             removed from the UI(and has been dropped from the edge's memory). Note that confirm
+                             should be filled - with any value - when sent from the GUI.
 
 */
 
@@ -20,41 +33,57 @@ Commands related to keeping a full list of all cameras.
 // GUI can request this with ListCameras
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ListOfCameras {
-    pub cameras: HashMap<(u32, u32), String>, // hashmap has a structure of <(conn_id,camera_id), name>
+    pub cameras: HashMap<(u32, u64), (String, bool)>, // hashmap has a structure of <(conn_id,camera_id), name>
 }
 
 // Server -> GUI.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CameraDisconnected {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
+}
+
+// Server -> GUI.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CameraConnected {
+    pub conn_id: u32,
+    pub camera_id: u64,
+    pub camera_name: String,
 }
 
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GUISetNameCamera {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
     pub name: String
 }
 
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SetNameCamera {
-    pub camera_id: u32,
+    pub camera_id: u64,
     pub name: String
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<u32, String>
+    pub cameras: HashMap<u64, String>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug)]
 pub struct UnregisterCamera {
-    pub camera_id: u32
+    pub camera_id: u64
+}
+
+// Round trip
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ForgetCamera {
+    pub conn_id: u32,
+    pub camera_id: u64,
+    pub confirm: bool,
 }
 
 /**
@@ -71,21 +100,27 @@ Commands related directly to the GUI receiving 'video' from a camera
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Image {
-    pub camera_id: u32,
+    pub camera_id: u64,
     // TBD data type for images
 }
 
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug)]
-pub struct StartViewingCamera {
+pub struct GUIStartViewingCamera {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
+}
+
+// Server -> Edge
+#[derive(Serialize, Deserialize, Debug)]
+pub struct StartViewingCamera {
+    pub camera_id: u64,
 }
 
 // Server -> Edge: Tells the edge to stop sending the camera feed. Only sent when no more GUIs are watching the given camera feed
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StopViewingCamera {
-    pub camera_id: u32,
+    pub camera_id: u64,
 }
 /**
 
@@ -95,6 +130,7 @@ Commands related to displaying or altering the configuration of a camera
 * ViewCameraConfig (Edge -> Server -> GUI)
 * Configuration (Edge -> Server -> GUI) - Displaying camera config
 * Configuration (GUI -> Server -> Edge) - Updating camera config
+* Setpoint (GUI -> Server -> Edge) - (Attach no JSON to setpoint all cameras)
 
 */
 
@@ -104,7 +140,7 @@ Commands related to displaying or altering the configuration of a camera
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ViewCameraConfig {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
 }
 
 // Edge -> Server: Sending current config. conn_id is a GUI id.
@@ -114,7 +150,7 @@ pub struct ViewCameraConfig {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Configuration {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
     pub configuration: String
 }
 
@@ -122,13 +158,13 @@ pub struct Configuration {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GUISetpoint {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
 }
 
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Setpoint {
-    pub camera_id: u32,
+    pub camera_id: u64,
 }
 
 
@@ -144,7 +180,7 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 // Edge -> Server.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageAnalysis {
-    pub camera_id: u32,
+    pub camera_id: u64,
     pub intensity: f32,
     pub deviation: f32
 }
@@ -153,13 +189,10 @@ pub struct ImageAnalysis {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GUIImageAnalysis {
     pub conn_id: u32,
-    pub camera_id: u32,
+    pub camera_id: u64,
     pub intensity: f32,
     pub deviation: f32
 }
-
-
-
 
 
 
@@ -169,7 +202,7 @@ pub fn image_mutex() -> Mutex<Image> {
     let mutex: Mutex<Image> = Mutex::new(Image {
         camera_id: 0
     });
-    return mutex;
+    mutex
 }
 pub fn configuration_mutex() -> Mutex<Configuration> {
     let mutex: Mutex<Configuration> = Mutex::new( Configuration{
@@ -179,14 +212,14 @@ pub fn configuration_mutex() -> Mutex<Configuration> {
     });
     mutex
 }
- pub fn camera_info_mutex() -> Mutex<ImageAnalysis> {
-     let mutex: Mutex<ImageAnalysis> = Mutex::new(ImageAnalysis {
-         camera_id: 0,
-         intensity: 0.0,
-         deviation: 0.0
-     });
-     mutex
- }
+pub fn camera_info_mutex() -> Mutex<ImageAnalysis> {
+    let mutex: Mutex<ImageAnalysis> = Mutex::new(ImageAnalysis {
+        camera_id: 0,
+        intensity: 0.0,
+        deviation: 0.0
+    });
+    mutex
+}
 pub fn register_cameras_mutex() -> Mutex<RegisterCameras> {
     let mutex: Mutex<RegisterCameras> = Mutex::new(RegisterCameras {
         cameras: HashMap::new()
