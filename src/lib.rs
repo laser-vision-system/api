@@ -2,6 +2,12 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug)]
+pub enum CameraState {
+    Active,
+    Disconnected,
+    Broken
+}
 
 // Server -> GUI
 // Server -> Edge
@@ -33,7 +39,7 @@ Commands related to keeping a full list of all cameras.
 // GUI can request this with ListCameras
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ListOfCameras {
-    pub cameras: HashMap<(u32, u64), (String, bool)>, // hashmap has a structure of <(conn_id,camera_id), name>
+    pub cameras: HashMap<(u32, u64), (String, CameraState)>, // hashmap has a structure of <(conn_id,camera_id), name>
 }
 
 // Server -> GUI.
@@ -69,12 +75,18 @@ pub struct SetNameCamera {
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<u64, String>
+    pub cameras: HashMap<u64, (String, CameraState)>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug)]
-pub struct UnregisterCamera {
+pub struct DisconnectCamera {
+    pub camera_id: u64
+}
+
+// Edge -> Server
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BreakCamera {
     pub camera_id: u64
 }
 
@@ -226,8 +238,8 @@ pub fn register_cameras_mutex() -> Mutex<RegisterCameras> {
     });
     mutex
 }
-pub fn unregister_cameras_mutex() -> Mutex<UnregisterCamera> {
-    let mutex: Mutex<UnregisterCamera> = Mutex::new(UnregisterCamera {
+pub fn unregister_cameras_mutex() -> Mutex<DisconnectCamera> {
+    let mutex: Mutex<DisconnectCamera> = Mutex::new(DisconnectCamera {
         camera_id: 0
     });
     mutex
