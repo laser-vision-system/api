@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum CameraState {
     Active,
     Disconnected,
