@@ -1,5 +1,10 @@
 use serde::{Deserialize, Serialize};
 
+pub type CameraId = u64;
+pub type ConnId = u32;
+pub type Intensity = f32;
+pub type Deviation = f32;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum CameraState {
     Active,
@@ -28,8 +33,8 @@ Commands related to keeping a full list of all cameras.
 // Round trip
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgetCamera {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
     pub confirm: bool,
 }
 
@@ -49,8 +54,8 @@ Commands related to displaying or altering the configuration of a camera
 // Server -> Edge. conn_id is the GUI id to be sent back with Configuration.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ViewCameraConfig {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
 }
 
 // Edge -> Server: Sending current config. conn_id is a GUI id.
@@ -59,7 +64,7 @@ pub struct ViewCameraConfig {
 // GUI <- Server: Displaying current config. conn_id is an edge id
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Configuration {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
     pub configuration: String
 }

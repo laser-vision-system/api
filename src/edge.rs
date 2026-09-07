@@ -1,7 +1,7 @@
 
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use crate::shared::CameraState;
+use crate::shared::{CameraId, CameraState, Deviation, Intensity};
 
 // Server -> GUI
 // Server -> Edge
@@ -32,26 +32,26 @@ Commands related to keeping a full list of all cameras.
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetNameCamera {
-    pub camera_id: u64,
+    pub camera_id: CameraId,
     pub name: String
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<u64, (String, CameraState)>
+    pub cameras: HashMap<CameraId, (String, CameraState)>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DisconnectCamera {
-    pub camera_id: u64
+    pub camera_id: CameraId
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BreakCamera {
-    pub camera_id: u64
+    pub camera_id: CameraId
 }
 
 /**
@@ -67,13 +67,13 @@ Commands related directly to the GUI receiving 'video' from a camera
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StartViewingCamera {
-    pub camera_id: u64,
+    pub camera_id: CameraId,
 }
 
 // Server -> Edge: Tells the edge to stop sending the camera feed. Only sent when no more GUIs are watching the given camera feed
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StopViewingCamera {
-    pub camera_id: u64,
+    pub camera_id: CameraId,
 }
 
 /**
@@ -91,7 +91,7 @@ Commands related to displaying or altering the configuration of a camera
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Setpoint {
-    pub camera_id: u64,
+    pub camera_id: CameraId,
 }
 
 /**
@@ -106,9 +106,9 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 // Edge -> Server.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageAnalysis {
-    pub camera_id: u64,
-    pub intensity: f32,
-    pub deviation: f32
+    pub camera_id: CameraId,
+    pub intensity: Intensity,
+    pub deviation: Deviation
 }
 
 

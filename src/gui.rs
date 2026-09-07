@@ -1,6 +1,6 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
-use crate::shared::CameraState;
+use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity};
 
 /**
 
@@ -20,33 +20,73 @@ Commands related to keeping a full list of all cameras.
 
 */
 
+
+// GUI can request with ListEdges
+pub struct ListOfEdges {
+    pub edges: HashMap<ConnId, String>
+}
+
+pub struct SetEdgeName {
+    pub edge_id: ConnId,
+    pub name: String,
+}
+
+pub struct SetEdgeProcessingType {
+    pub edge_id: ConnId,
+    pub processing_type: String,
+}
+
+pub struct ListProcessingTypes {
+    pub processing_types: HashSet<String>
+}
+
 // Server -> GUI.
 // GUI can request this with ListCameras
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfCameras {
-    pub cameras: HashMap<(u32, u64), (String, CameraState)>, // hashmap has a structure of <(conn_id,camera_id), name>
+    pub cameras: HashMap<(ConnId, CameraId), CameraDetails>, // hashmap has a structure of <(conn_id,camera_id), name>
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CameraDetails {
+    name: String,
+    state: CameraState,
+    warn_below_threshold: f32,
+    alert_below_threshold: f32,
+}
+
+pub struct SetCameraThresholds {
+    pub edge_id: ConnId,
+    pub camera_id: CameraId,
+    warn_below_threshold: Deviation,
+    alert_below_threshold: Deviation,
+}
+
+pub struct SetDefaultThreshold {
+    warn_below_threshold: f32,
+    alert_below_threshold: f32,
 }
 
 // Server -> GUI.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDisconnected {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
 }
 
 // Server -> GUI.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraConnected {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
     pub camera_name: String,
 }
 
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct GUISetNameCamera {
-    pub conn_id: u32,
-    pub camera_id: u64,
+pub struct SetNameCamera {
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
     pub name: String
 }
 
@@ -63,8 +103,8 @@ Commands related directly to the GUI receiving 'video' from a camera
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StartViewingCamera {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
 }
 
 /**
@@ -82,8 +122,8 @@ Commands related to displaying or altering the configuration of a camera
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Setpoint {
-    pub conn_id: u32,
-    pub camera_id: u64,
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
 }
 
 /**
@@ -98,8 +138,8 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 // Server -> GUI
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageAnalysis {
-    pub conn_id: u32,
-    pub camera_id: u64,
-    pub intensity: f32,
-    pub deviation: f32
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
+    pub intensity: Intensity,
+    pub deviation: Deviation
 }
