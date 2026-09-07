@@ -22,17 +22,20 @@ Commands related to keeping a full list of all cameras.
 
 
 // GUI can request with ListEdges
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfEdges {
     pub edges: HashMap<ConnId, String>
 }
 
 // GUI -> Server
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeName {
     pub edge_id: ConnId,
     pub name: String,
 }
 
 // GUI -> Server
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeProcessingType {
     pub edge_id: ConnId,
     pub processing_type: VisionTechnique,
@@ -54,6 +57,7 @@ pub struct CameraDetails {
 }
 
 // GUI -> Server
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetCameraThresholds {
     pub edge_id: ConnId,
     pub camera_id: CameraId,
@@ -62,6 +66,7 @@ pub struct SetCameraThresholds {
 }
 
 // GUI -> Server
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetDefaultThreshold {
     pub warn_below_threshold: f32,
     pub alert_below_threshold: f32,

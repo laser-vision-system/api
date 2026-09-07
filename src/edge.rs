@@ -55,6 +55,7 @@ pub struct BreakCamera {
 }
 
 // Server -> Edge
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetProcessingType {
     pub processing_type: VisionTechnique,
 }
