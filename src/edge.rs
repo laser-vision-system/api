@@ -1,7 +1,7 @@
 
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, Deviation, Intensity, VisionTechnique};
+use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity, VisionTechnique};
 
 // Server -> GUI
 // Server -> Edge
@@ -10,6 +10,13 @@ pub struct ErrorMSG {
     pub code: String,
     pub message: String,
 }
+
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InitialiseConnection {
+    pub edge_id: ConnId
+}
+
 
 /**
 
