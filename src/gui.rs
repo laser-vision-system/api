@@ -26,11 +26,13 @@ pub struct ListOfEdges {
     pub edges: HashMap<ConnId, String>
 }
 
+// GUI -> Server
 pub struct SetEdgeName {
     pub edge_id: ConnId,
     pub name: String,
 }
 
+// GUI -> Server
 pub struct SetEdgeProcessingType {
     pub edge_id: ConnId,
     pub processing_type: VisionTechnique,
@@ -51,6 +53,7 @@ pub struct CameraDetails {
     pub alert_below_threshold: f32,
 }
 
+// GUI -> Server
 pub struct SetCameraThresholds {
     pub edge_id: ConnId,
     pub camera_id: CameraId,
@@ -58,6 +61,7 @@ pub struct SetCameraThresholds {
     pub alert_below_threshold: Deviation,
 }
 
+// GUI -> Server
 pub struct SetDefaultThreshold {
     pub warn_below_threshold: f32,
     pub alert_below_threshold: f32,

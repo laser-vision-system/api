@@ -1,7 +1,7 @@
 
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, Deviation, Intensity};
+use crate::shared::{CameraId, CameraState, Deviation, Intensity, VisionTechnique};
 
 // Server -> GUI
 // Server -> Edge
@@ -52,6 +52,11 @@ pub struct DisconnectCamera {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BreakCamera {
     pub camera_id: CameraId
+}
+
+// Server -> Edge
+pub struct SetProcessingType {
+    pub processing_type: VisionTechnique,
 }
 
 /**
