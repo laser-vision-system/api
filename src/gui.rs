@@ -45,22 +45,22 @@ pub struct ListOfCameras {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDetails {
-    name: String,
-    state: CameraState,
-    warn_below_threshold: f32,
-    alert_below_threshold: f32,
+    pub name: String,
+    pub state: CameraState,
+    pub warn_below_threshold: f32,
+    pub alert_below_threshold: f32,
 }
 
 pub struct SetCameraThresholds {
     pub edge_id: ConnId,
     pub camera_id: CameraId,
-    warn_below_threshold: Deviation,
-    alert_below_threshold: Deviation,
+    pub warn_below_threshold: Deviation,
+    pub alert_below_threshold: Deviation,
 }
 
 pub struct SetDefaultThreshold {
-    warn_below_threshold: f32,
-    alert_below_threshold: f32,
+    pub warn_below_threshold: f32,
+    pub alert_below_threshold: f32,
 }
 
 // Server -> GUI.
