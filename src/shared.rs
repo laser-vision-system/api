@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub type CameraId = u64;
-pub type ConnId = u32;
+pub type ConnId = u64;
 pub type Intensity = f32;
 pub type Deviation = f32;
 
