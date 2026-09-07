@@ -47,6 +47,7 @@ Commands related to displaying or altering the configuration of a camera
 * Configuration (Edge -> Server -> GUI) - Displaying camera config
 * Configuration (GUI -> Server -> Edge) - Updating camera config
 * Setpoint (GUI -> Server -> Edge) - (Attach no JSON to setpoint all cameras)
+* VisionTechnique (round trip) - Change the vision processing implementation per edge client
 
 */
 
@@ -67,4 +68,12 @@ pub struct Configuration {
     pub conn_id: ConnId,
     pub camera_id: CameraId,
     pub configuration: String
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum VisionTechnique {
+	Empty,
+	Cnn,
+	Diff,
+	Demonstration,
 }
