@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity};
+use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity, VisionTechnique};
 
 /**
 
@@ -33,11 +33,7 @@ pub struct SetEdgeName {
 
 pub struct SetEdgeProcessingType {
     pub edge_id: ConnId,
-    pub processing_type: String,
-}
-
-pub struct ListProcessingTypes {
-    pub processing_types: HashSet<String>
+    pub processing_type: VisionTechnique,
 }
 
 // Server -> GUI.

@@ -12,6 +12,15 @@ pub enum CameraState {
     Broken
 }
 
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub enum VisionTechnique {
+    Empty,
+    Cnn,
+    Diff,
+    Demonstration,
+}
+
+
 /**
 
 # Camera list commands:
@@ -70,10 +79,3 @@ pub struct Configuration {
     pub configuration: String
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum VisionTechnique {
-	Empty,
-	Cnn,
-	Diff,
-	Demonstration,
-}
