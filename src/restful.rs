@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 
 // Post structure for /edge_logs
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Logs {
-    logs: HashSet<String>
+pub struct Logs {
+    pub logs: HashSet<String>
 }
 
 // Post structure for /write_default_config
 #[derive(Serialize, Deserialize, Debug, Clone)]
-struct Config {
-    json: String,
+pub struct Config {
+    pub json: String,
 }
