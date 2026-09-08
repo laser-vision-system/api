@@ -45,7 +45,7 @@ pub struct SetEdgeProcessingType {
 // GUI can request this with ListCameras
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfCameras {
-    pub cameras: HashMap<(ConnId, CameraId), CameraDetails>, // hashmap has a structure of <(conn_id,camera_id), name>
+    pub cameras: HashMap<String, CameraDetails>, // hashmap has a structure of <(conn_id,camera_id), name>
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
