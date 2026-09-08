@@ -68,8 +68,16 @@ pub struct SetCameraThresholds {
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetDefaultThreshold {
-    pub warn_below_threshold: f32,
-    pub alert_below_threshold: f32,
+    pub warn_below_threshold: Deviation,
+    pub alert_below_threshold: Deviation,
+}
+
+// Server -> GUI
+//requested with GetDefaultThresholds
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DefaultThresholds {
+    pub warn_below_threshold: Deviation,
+    pub alert_below_threshold: Deviation,
 }
 
 // Server -> GUI.
