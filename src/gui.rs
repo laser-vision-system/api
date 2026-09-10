@@ -1,6 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity, VisionTechnique};
+use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
 
 /**
 
@@ -51,7 +51,7 @@ pub struct ListOfCameras {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDetails {
     pub name: String,
-    pub state: CameraState,
+    pub state: CameraStatus,
     pub warn_below_threshold: f32,
     pub alert_below_threshold: f32,
 }
@@ -153,7 +153,6 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 pub struct ImageAnalysis {
     pub conn_id: String,
     pub camera_id: CameraId,
-    pub intensity: Intensity,
     pub deviation: Deviation
 }
 
