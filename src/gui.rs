@@ -24,7 +24,7 @@ Commands related to keeping a full list of all cameras.
 // GUI can request with ListEdges
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfEdges {
-    pub edges: HashMap<ConnId, String>
+    pub edges: HashMap<String, String>
 }
 
 // GUI -> Server
@@ -37,7 +37,7 @@ pub struct SetEdgeName {
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeProcessingType {
-    pub edge_id: ConnId,
+    pub edge_id: String,
     pub processing_type: VisionTechnique,
 }
 
@@ -90,8 +90,8 @@ pub struct CameraDisconnected {
 // Server -> GUI.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraConnected {
-    pub conn_id: ConnId,
-    pub camera_id: CameraId,
+    pub conn_id: String,
+    pub camera_id: String,
     pub camera_name: String,
 }
 
@@ -151,8 +151,28 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 // Server -> GUI
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageAnalysis {
-    pub conn_id: ConnId,
+    pub conn_id: String,
     pub camera_id: CameraId,
     pub intensity: Intensity,
     pub deviation: Deviation
+}
+
+
+/**
+Structs to allow the server to send data to the GUI with ID's in string format. Refer to shared for documentation
+
+*/
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Configuration {
+    pub conn_id: String,
+    pub camera_id: CameraId,
+    pub configuration: String
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgetCamera {
+    pub conn_id: String,
+    pub camera_id: CameraId,
+    pub confirm: bool,
 }
