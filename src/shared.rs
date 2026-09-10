@@ -4,12 +4,29 @@ pub type CameraId = u64;
 pub type ConnId = u64;
 pub type Deviation = f32;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum CameraState {
-    Active,
-    Disconnected,
-    Broken
+/// The current status of the camera device.
+///
+/// This is a fieldless enum (meaning none of the variants hold data) where the
+/// discriminant is the type [`u8`].
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[repr(u8)]
+pub enum CameraStatus {
+    /// This camera device has not yet been initialised. This should never be
+    /// the status outside of the camera detection logic. If this value has
+    /// been sent to the server, it is a major error.
+    #[default]
+    Uninitialised = 0,
+    /// This camera device is initialised and ready for use, the stream has been
+    /// opened.
+    Active = 1,
+    /// This camera device is not currently connected.
+    Disconnected = 2,
+    /// This camera can be initialised, but fails to operate correctly.
+    Broken = 3,
+    /// This device could not be initialised.
+    Invalid = 4,
 }
+
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum VisionTechnique {

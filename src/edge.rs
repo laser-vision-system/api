@@ -1,7 +1,7 @@
 
 use std::{collections::HashMap, time::Duration};
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, VisionTechnique};
+use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
 
 // Server -> GUI
 // Server -> Edge
