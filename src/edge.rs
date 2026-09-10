@@ -1,7 +1,7 @@
 
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, VisionTechnique};
+use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
 
 // Server -> GUI
 // Server -> Edge
@@ -17,6 +17,49 @@ pub struct InitialiseConnection {
     pub edge_id: ConnId
 }
 
+/// Information about a newly instantiated device.
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct NewCameraInfo {
+	pub name: String,
+	pub status: CameraStatus,
+}
+
+impl NewCameraInfo {
+	pub fn new(name: String, status: CameraStatus) -> Self {
+		Self { name, status }
+	}
+}
+
+impl From<(String, CameraStatus)> for NewCameraInfo {
+	fn from(value: (String, CameraStatus)) -> Self {
+		NewCameraInfo {
+			name: value.0,
+			status: value.1,
+		}
+	}
+}
+
+/// System-level default settings for the Edge.
+///
+/// This will be provided by the initial connection to the server.
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Settings {
+	pub update_delay: Duration,
+	pub camera_err_decrement: u16,
+	pub camera_err_increment: u16,
+	pub camera_err_threshold: u16,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            update_delay: Duration::from_secs(1),
+            camera_err_decrement: 1,
+            camera_err_increment: 2,
+            camera_err_threshold: 5
+        }
+    }
+}
 
 /**
 
@@ -46,19 +89,14 @@ pub struct SetNameCamera {
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<CameraId, (String, CameraState)>
+    pub cameras: HashMap<CameraId, NewCameraInfo>
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DisconnectCamera {
-    pub camera_id: CameraId
-}
-
-// Edge -> Server
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BreakCamera {
-    pub camera_id: CameraId
+pub struct UpdateCameraStatus {
+    pub camera_id: CameraId,
+    pub status: CameraStatus,
 }
 
 // Server -> Edge

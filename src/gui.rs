@@ -1,6 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, VisionTechnique};
+use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
 
 /**
 
@@ -51,7 +51,7 @@ pub struct ListOfCameras {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDetails {
     pub name: String,
-    pub state: CameraState,
+    pub state: CameraStatus,
     pub warn_below_threshold: f32,
     pub alert_below_threshold: f32,
 }
