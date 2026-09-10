@@ -56,8 +56,13 @@ Commands related to keeping a full list of all cameras.
 */
 
 // Round trip
+/// A request to forget about a camera.
+///
+/// The GUI will initiate the request, which the server will forward to the
+/// Edge. The Edge will confirm the request to forget about the camera and
+/// return this.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ForgetCamera {
+pub struct ForgetCameraRequest {
     pub conn_id: ConnId,
     pub camera_id: CameraId,
     pub confirm: bool,
