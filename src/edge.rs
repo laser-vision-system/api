@@ -1,20 +1,18 @@
-
-use std::{collections::HashMap, time::Duration};
-use serde::{Deserialize, Serialize};
 use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
+use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, time::Duration};
 
 // Server -> GUI
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorMSG {
-    pub code: String,
-    pub message: String,
+	pub code: String,
+	pub message: String,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitialiseConnection {
-    pub edge_id: ConnId
+	pub edge_id: ConnId,
 }
 
 /// Information about a newly instantiated device.
@@ -44,6 +42,7 @@ impl From<(String, CameraStatus)> for NewCameraInfo {
 /// This will be provided by the initial connection to the server.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Settings {
+	pub websocket_poll_interval: Duration,
 	pub update_delay: Duration,
 	pub camera_err_decrement: u16,
 	pub camera_err_increment: u16,
@@ -51,14 +50,15 @@ pub struct Settings {
 }
 
 impl Default for Settings {
-    fn default() -> Self {
-        Self {
-            update_delay: Duration::from_secs(1),
-            camera_err_decrement: 1,
-            camera_err_increment: 2,
-            camera_err_threshold: 5
-        }
-    }
+	fn default() -> Self {
+		Self {
+			websocket_poll_interval: Duration::from_micros(10),
+			update_delay: Duration::from_secs(1),
+			camera_err_decrement: 1,
+			camera_err_increment: 2,
+			camera_err_threshold: 5,
+		}
+	}
 }
 
 /**
@@ -73,36 +73,36 @@ Commands related to keeping a full list of all cameras.
 * RegisterCameras (Edge -> Server)
 * UnregisterCamera (Edge -> Server)
 * ForgetCamera (round trip). When a server becomes disconnected, the client can send one of these commands,
-                             and if the response comes back with 'confirm' as true, it means the camera can be
-                             removed from the UI(and has been dropped from the edge's memory). Note that confirm
-                             should be filled - with any value - when sent from the GUI.
+							 and if the response comes back with 'confirm' as true, it means the camera can be
+							 removed from the UI(and has been dropped from the edge's memory). Note that confirm
+							 should be filled - with any value - when sent from the GUI.
 
 */
 
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetNameCamera {
-    pub camera_id: CameraId,
-    pub name: String
+	pub camera_id: CameraId,
+	pub name: String,
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<CameraId, NewCameraInfo>
+	pub cameras: HashMap<CameraId, NewCameraInfo>,
 }
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UpdateCameraStatus {
-    pub camera_id: CameraId,
-    pub status: CameraStatus,
+	pub camera_id: CameraId,
+	pub status: CameraStatus,
 }
 
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetProcessingType {
-    pub processing_type: VisionTechnique,
+	pub processing_type: VisionTechnique,
 }
 
 /**
@@ -118,13 +118,13 @@ Commands related directly to the GUI receiving 'video' from a camera
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StartViewingCamera {
-    pub camera_id: CameraId,
+	pub camera_id: CameraId,
 }
 
 // Server -> Edge: Tells the edge to stop sending the camera feed. Only sent when no more GUIs are watching the given camera feed
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StopViewingCamera {
-    pub camera_id: CameraId,
+	pub camera_id: CameraId,
 }
 
 /**
@@ -142,7 +142,7 @@ Commands related to displaying or altering the configuration of a camera
 // Server -> Edge
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Setpoint {
-    pub camera_id: CameraId,
+	pub camera_id: CameraId,
 }
 
 /**
@@ -157,10 +157,6 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 // Edge -> Server.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageAnalysis {
-    pub camera_id: CameraId,
-    pub deviation: Deviation
+	pub camera_id: CameraId,
+	pub deviation: Deviation,
 }
-
-
-
-
