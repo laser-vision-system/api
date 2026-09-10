@@ -100,3 +100,12 @@ pub struct Configuration {
     pub configuration: String
 }
 
+impl Configuration {
+    pub fn build_response(request: ViewCameraConfig, response: String) -> Self {
+        Self {
+            conn_id: request.conn_id,
+            camera_id: request.camera_id,
+            configuration: response,
+        }
+    }
+}
