@@ -83,14 +83,9 @@ pub struct RegisterCameras {
 
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct DisconnectCamera {
-    pub camera_id: CameraId
-}
-
-// Edge -> Server
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct BreakCamera {
-    pub camera_id: CameraId
+pub struct UpdateCameraStatus {
+    pub camera_id: CameraId,
+    pub status: CameraStatus,
 }
 
 // Server -> Edge
