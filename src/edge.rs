@@ -17,6 +17,28 @@ pub struct InitialiseConnection {
     pub edge_id: ConnId
 }
 
+/// Information about a newly instantiated device.
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct NewCameraInfo {
+	pub name: String,
+	pub status: CameraStatus,
+}
+
+impl NewCameraInfo {
+	pub fn new(name: String, status: CameraStatus) -> Self {
+		Self { name, status }
+	}
+}
+
+impl From<(String, CameraStatus)> for NewCameraInfo {
+	fn from(value: (String, CameraStatus)) -> Self {
+		NewCameraInfo {
+			name: value.0,
+			status: value.1,
+		}
+	}
+}
+
 /// System-level default settings for the Edge.
 ///
 /// This will be provided by the initial connection to the server.
@@ -56,7 +78,7 @@ pub struct SetNameCamera {
 // Edge -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RegisterCameras {
-    pub cameras: HashMap<CameraId, (String, CameraState)>
+    pub cameras: HashMap<CameraId, NewCameraInfo>
 }
 
 // Edge -> Server
