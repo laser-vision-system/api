@@ -1,5 +1,5 @@
 
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 use serde::{Deserialize, Serialize};
 use crate::shared::{CameraId, CameraState, ConnId, Deviation, VisionTechnique};
 
@@ -17,6 +17,16 @@ pub struct InitialiseConnection {
     pub edge_id: ConnId
 }
 
+/// System-level default settings for the Edge.
+///
+/// This will be provided by the initial connection to the server.
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct Settings {
+	pub update_delay: Duration,
+	pub camera_err_decrement: u16,
+	pub camera_err_increment: u16,
+	pub camera_err_threshold: u16,
+}
 
 /**
 
