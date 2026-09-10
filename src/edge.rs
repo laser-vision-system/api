@@ -42,12 +42,23 @@ impl From<(String, CameraStatus)> for NewCameraInfo {
 /// System-level default settings for the Edge.
 ///
 /// This will be provided by the initial connection to the server.
-#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Settings {
 	pub update_delay: Duration,
 	pub camera_err_decrement: u16,
 	pub camera_err_increment: u16,
 	pub camera_err_threshold: u16,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            update_delay: Duration::from_secs(1),
+            camera_err_decrement: 1,
+            camera_err_increment: 2,
+            camera_err_threshold: 5
+        }
+    }
 }
 
 /**
