@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use serde::{Deserialize, Serialize};
-use crate::shared::{CameraId, CameraState, ConnId, Deviation, Intensity, VisionTechnique};
+use crate::shared::{CameraId, CameraState, ConnId, Deviation, VisionTechnique};
 
 /**
 
@@ -153,6 +153,5 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 pub struct ImageAnalysis {
     pub conn_id: ConnId,
     pub camera_id: CameraId,
-    pub intensity: Intensity,
     pub deviation: Deviation
 }
