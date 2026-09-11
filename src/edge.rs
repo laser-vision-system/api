@@ -1,4 +1,6 @@
-use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, VisionTechnique};
+use crate::shared::{
+	CameraId, CameraStatus, Configuration, ConnId, Deviation, ViewCameraConfig, VisionTechnique,
+};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
 
@@ -159,4 +161,17 @@ Constant stream of camera data from the edge to the GUI. May later include alert
 pub struct ImageAnalysis {
 	pub camera_id: CameraId,
 	pub deviation: Deviation,
+}
+
+/// The different types of requests the edge will get.
+///
+/// Not intended to be sent to the edge itself.
+#[derive(Clone, Debug)]
+pub enum EdgeRequests {
+	SetNameCamera(SetNameCamera),
+	StartViewingCamera(StartViewingCamera),
+	StopViewingCamera(StopViewingCamera),
+	Configuration(Configuration),
+	ViewCameraConfig(ViewCameraConfig),
+	Setpoint(Setpoint),
 }
