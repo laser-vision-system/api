@@ -174,4 +174,5 @@ pub enum EdgeRequests {
 	Configuration(Configuration),
 	ViewCameraConfig(ViewCameraConfig),
 	Setpoint(Setpoint),
+	SetProcessingType(SetProcessingType),
 }

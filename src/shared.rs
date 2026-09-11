@@ -11,31 +11,29 @@ pub type Deviation = f32;
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, PartialEq, Eq)]
 #[repr(u8)]
 pub enum CameraStatus {
-    /// This camera device has not yet been initialised. This should never be
-    /// the status outside of the camera detection logic. If this value has
-    /// been sent to the server, it is a major error.
-    #[default]
-    Uninitialised = 0,
-    /// This camera device is initialised and ready for use, the stream has been
-    /// opened.
-    Active = 1,
-    /// This camera device is not currently connected.
-    Disconnected = 2,
-    /// This camera can be initialised, but fails to operate correctly.
-    Broken = 3,
-    /// This device could not be initialised.
-    Invalid = 4,
+	/// This camera device has not yet been initialised. This should never be
+	/// the status outside of the camera detection logic. If this value has
+	/// been sent to the server, it is a major error.
+	#[default]
+	Uninitialised = 0,
+	/// This camera device is initialised and ready for use, the stream has been
+	/// opened.
+	Active = 1,
+	/// This camera device is not currently connected.
+	Disconnected = 2,
+	/// This camera can be initialised, but fails to operate correctly.
+	Broken = 3,
+	/// This device could not be initialised.
+	Invalid = 4,
 }
-
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum VisionTechnique {
-    Empty,
-    Cnn,
-    Diff,
-    Demonstration,
+	Empty,
+	Demonstration,
+	Cnn,
+	Diff,
 }
-
 
 /**
 
@@ -49,9 +47,9 @@ Commands related to keeping a full list of all cameras.
 * RegisterCameras (Edge -> Server)
 * UnregisterCamera (Edge -> Server)
 * ForgetCamera (round trip). When a server becomes disconnected, the client can send one of these commands,
-                             and if the response comes back with 'confirm' as true, it means the camera can be
-                             removed from the UI(and has been dropped from the edge's memory). Note that confirm
-                             should be filled - with any value - when sent from the GUI.
+							 and if the response comes back with 'confirm' as true, it means the camera can be
+							 removed from the UI(and has been dropped from the edge's memory). Note that confirm
+							 should be filled - with any value - when sent from the GUI.
 
 */
 
@@ -63,9 +61,9 @@ Commands related to keeping a full list of all cameras.
 /// return this.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgetCameraRequest {
-    pub conn_id: ConnId,
-    pub camera_id: CameraId,
-    pub confirm: bool,
+	pub conn_id: ConnId,
+	pub camera_id: CameraId,
+	pub confirm: bool,
 }
 
 /**
@@ -85,8 +83,8 @@ Commands related to displaying or altering the configuration of a camera
 // Server -> Edge. conn_id is the GUI id to be sent back with Configuration.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ViewCameraConfig {
-    pub conn_id: ConnId,
-    pub camera_id: CameraId,
+	pub conn_id: ConnId,
+	pub camera_id: CameraId,
 }
 
 // Edge -> Server: Sending current config. conn_id is a GUI id.
@@ -95,17 +93,17 @@ pub struct ViewCameraConfig {
 // GUI <- Server: Displaying current config. conn_id is an edge id
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Configuration {
-    pub conn_id: ConnId,
-    pub camera_id: CameraId,
-    pub configuration: String
+	pub conn_id: ConnId,
+	pub camera_id: CameraId,
+	pub configuration: String,
 }
 
 impl Configuration {
-    pub fn build_response(request: ViewCameraConfig, response: String) -> Self {
-        Self {
-            conn_id: request.conn_id,
-            camera_id: request.camera_id,
-            configuration: response,
-        }
-    }
+	pub fn build_response(request: ViewCameraConfig, response: String) -> Self {
+		Self {
+			conn_id: request.conn_id,
+			camera_id: request.camera_id,
+			configuration: response,
+		}
+	}
 }
