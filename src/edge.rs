@@ -54,7 +54,7 @@ pub struct Settings {
 impl Default for Settings {
 	fn default() -> Self {
 		Self {
-			websocket_poll_interval: Duration::from_micros(10),
+			websocket_poll_interval: Duration::from_millis(10),
 			update_delay: Duration::from_secs(1),
 			camera_err_decrement: 1,
 			camera_err_increment: 2,
