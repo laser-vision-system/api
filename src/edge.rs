@@ -167,6 +167,8 @@ pub struct ImageAnalysis {
 ///
 /// Not intended to be sent to the edge itself.
 #[derive(Clone, Debug)]
+#[repr(u8)]
+#[non_exhaustive]
 pub enum EdgeRequests {
 	SetNameCamera(SetNameCamera),
 	StartViewingCamera(StartViewingCamera),

@@ -8,31 +8,37 @@ pub type Deviation = f32;
 ///
 /// This is a fieldless enum (meaning none of the variants hold data) where the
 /// discriminant is the type [`u8`].
-#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, PartialEq, Eq)]
+///
+/// When (de)serialising, it still uses the variant name, not the dicriminant
+/// value.
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
 pub enum CameraStatus {
-	/// This camera device has not yet been initialised. This should never be
-	/// the status outside of the camera detection logic. If this value has
-	/// been sent to the server, it is a major error.
-	#[default]
-	Uninitialised = 0,
 	/// This camera device is initialised and ready for use, the stream has been
 	/// opened.
-	Active = 1,
+	Active,
+	/// This camera has indices, but no actual camera device.
+	Limbo,
 	/// This camera device is not currently connected.
-	Disconnected = 2,
+	Disconnected,
 	/// This camera can be initialised, but fails to operate correctly.
-	Broken = 3,
-	/// This device could not be initialised.
-	Invalid = 4,
+	Broken,
+	// TODO: This should be reported to the GUI, but displayed separately.
+	/// This device could not be initialised and it should be ignored.
+	Invalid,
 }
 
+/// Which machine vision approach will be used.
+///
+/// This selection applies to the entire μ-com device.
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(u8)]
+#[non_exhaustive]
 pub enum VisionTechnique {
 	Empty,
 	Demonstration,
-	Cnn,
 	Diff,
+	Cnn,
 }
 
 /**
