@@ -37,7 +37,7 @@ pub struct SetEdgeName {
 // GUI -> Server
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeProcessingType {
-    pub edge_id: String,
+    pub edge_id: ConnId,
     pub processing_type: VisionTechnique,
 }
 
