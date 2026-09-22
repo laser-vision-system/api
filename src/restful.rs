@@ -1,15 +1,15 @@
 use std::collections::HashSet;
-use serde::{Deserialize, Serialize};
 
+use serde::{Deserialize, Serialize};
 
 // Post structure for /edge_logs
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Logs {
-    pub logs: HashSet<String>
+	pub logs: HashSet<String>,
 }
 
 // Post structure for /write_default_config
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
-    pub json: String,
+	pub json: String,
 }
