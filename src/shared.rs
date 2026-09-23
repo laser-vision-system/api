@@ -95,6 +95,12 @@ pub struct Configuration {
 }
 
 impl Configuration {
+	#[expect(
+		clippy::needless_pass_by_value,
+		reason = "This is a consuming function"
+	)]
+	/// Convert a [`ViewCameraConfig`] into a [`Configuration`].
+	// TODO: Move to a method on ViewCameraConfig.
 	pub fn build_response(request: ViewCameraConfig, response: String) -> Self {
 		Self {
 			conn_id: request.conn_id,

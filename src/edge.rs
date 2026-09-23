@@ -95,6 +95,7 @@ pub struct ImageAnalysis {
 /// The different types of requests the edge will get.
 ///
 /// Not intended to be sent to the edge itself.
+#[expect(clippy::module_name_repetitions, reason = "Not confusing")]
 #[derive(Clone, Debug)]
 #[repr(u8)]
 #[non_exhaustive]
@@ -123,7 +124,7 @@ pub struct StartViewingCamera {
 
 /// Tells the edge to stop sending the camera feed.
 ///
-/// Only sent when no more GUIs are watching the given camera feed
+/// Only sent when no more GUIs are watching the given camera feed.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StopViewingCamera {
 	pub camera_id: CameraId,
