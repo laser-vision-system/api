@@ -46,6 +46,7 @@ impl From<(String, CameraStatus)> for NewCameraInfo {
 ///
 /// This will be provided by the initial connection to the server.
 #[derive(Serialize, Deserialize, Clone, Debug)]
+#[non_exhaustive]
 pub struct Settings {
 	pub websocket_poll_interval: Duration,
 	pub update_delay: Duration,
