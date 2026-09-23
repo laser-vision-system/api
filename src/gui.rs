@@ -1,3 +1,5 @@
+//! Datatypes used for GUI communication.
+
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
@@ -6,51 +8,39 @@ use crate::shared::{
 	CameraId, CameraStatus, ConnId, Deviation, VisionTechnique,
 };
 
-/// # Camera list commands:
-/// Commands related to keeping a full list of all cameras.
+/// Provides a list of Edges.
 ///
-/// \* ListCameras (GUI -> Server)
-/// ListOfCameras (Server -> GUI)
-/// CameraDisconnected (Server -> GUI)
-/// SetNameCamera (GUI -> Server -> Edge)
-/// RegisterCameras (Edge -> Server)
-/// UnregisterCamera (Edge -> Server)
-/// ForgetCamera (round trip). When a server becomes disconnected, the client
-/// can send one of these commands, and if the response comes back with
-/// 'confirm' as true, it means the camera can be removed from the UI(and has
-/// been dropped from the edge's memory). Note that confirm should be filled -
-/// with any value - when sent from the GUI.
-///
-
-// GUI can request with ListEdges
+/// GUI can request with `ListEdges`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfEdges {
 	pub edges: HashMap<String, String>,
 }
 
-// GUI -> Server
+/// A request to change the name of an Edge.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeName {
 	pub edge_id: ConnId,
 	pub name: String,
 }
 
-// GUI -> Server
+/// A request to change the processing type of an Edge.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetEdgeProcessingType {
 	pub edge_id: ConnId,
 	pub processing_type: VisionTechnique,
 }
 
-// Server -> GUI.
-// GUI can request this with ListCameras
+/// Provides a list of cameras.
+///
+/// GUI can request this with `ListCameras`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfCameras {
-	pub cameras: HashMap<String, CameraDetails>, /* hashmap has a structure
-	                                              * of <(conn_id,camera_id),
-	                                              * name> */
+	// NOTE: Potentially outdated docstring?
+	/// hashmap has a structure of <(`conn_id`, `camera_id`), name>.
+	pub cameras: HashMap<String, CameraDetails>,
 }
 
+/// The information attached to each camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDetails {
 	pub name: String,
@@ -59,7 +49,7 @@ pub struct CameraDetails {
 	pub alert_below_threshold: f32,
 }
 
-// GUI -> Server
+/// A request to change the thresholds for a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetCameraThresholds {
 	pub edge_id: ConnId,
@@ -68,29 +58,30 @@ pub struct SetCameraThresholds {
 	pub alert_below_threshold: Deviation,
 }
 
-// GUI -> Server
+/// A request to change the default threshold.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetDefaultThreshold {
 	pub warn_below_threshold: Deviation,
 	pub alert_below_threshold: Deviation,
 }
 
-// Server -> GUI
-// requested with GetDefaultThresholds
+/// The current default threshold values.
+///
+/// Requested with `GetDefaultThresholds`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DefaultThresholds {
 	pub warn_below_threshold: Deviation,
 	pub alert_below_threshold: Deviation,
 }
 
-// Server -> GUI.
+/// A notification that a camera has disconnected.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraDisconnected {
 	pub conn_id: ConnId,
 	pub camera_id: CameraId,
 }
 
-// Server -> GUI.
+/// A notification that a camera has connected.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraConnected {
 	pub conn_id: String,
@@ -98,7 +89,7 @@ pub struct CameraConnected {
 	pub camera_name: String,
 }
 
-// GUI -> Server
+/// A request to set the name of a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetNameCamera {
 	pub conn_id: ConnId,
@@ -106,44 +97,24 @@ pub struct SetNameCamera {
 	pub name: String,
 }
 
-/// ## Image viewing commands:
-/// Commands related directly to the GUI receiving 'video' from a camera
-///
-/// StartViewingCamera (GUI -> Server -> Edge)
-/// StopViewingCamera (GUI -> Server -> Edge) (no data required from the gui)
-///
-
-// GUI -> Server
+/// A request to start receiving images from a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StartViewingCamera {
 	pub conn_id: ConnId,
 	pub camera_id: CameraId,
 }
 
-/// ## Configuration Commands:
-/// Commands related to displaying or altering the configuration of a camera
-///
-/// ViewCameraConfig (Edge -> Server -> GUI)
-/// Configuration (Edge -> Server -> GUI) - Displaying camera config
-/// Configuration (GUI -> Server -> Edge) - Updating camera config
-/// Setpoint (GUI -> Server -> Edge) - (Attach no JSON to setpoint all cameras)
-///
-
-// GUI -> Server
+/// A request to calibrate the setpoint of a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Setpoint {
 	pub conn_id: ConnId,
 	pub camera_id: CameraId,
 }
 
-/// ## Live data:
+/// A report of the image analysis data from a camera.
+///
 /// Constant stream of camera data from the edge to the GUI. May later include
 /// alerts if we decide GUI is not responsible for detecting such.
-///
-/// ImageAnalysis (Edge -> Server -> GUI)
-///
-
-// Server -> GUI
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImageAnalysis {
 	pub conn_id: String,
@@ -151,10 +122,10 @@ pub struct ImageAnalysis {
 	pub deviation: Deviation,
 }
 
-/// Structs to allow the server to send data to the GUI with ID's in string
-/// format. Refer to shared for documentation
-///
+// Structs to allow the server to send data to the GUI with IDs in string
+// format. Refer to shared for documentation.
 
+/// See [`Configuration`](crate::shared::Configuration).
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Configuration {
 	pub conn_id: String,
@@ -162,6 +133,7 @@ pub struct Configuration {
 	pub configuration: String,
 }
 
+/// See [`ForgetCameraRequest`](crate::shared::ForgetCameraRequest).
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgetCamera {
 	pub conn_id: String,
