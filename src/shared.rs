@@ -68,9 +68,9 @@ pub struct ForgetCameraRequest {
 
 /// A request to view the camera configuration.
 ///
-/// GUI -> Server. conn_id is an edge id.
+/// GUI -> Server. `conn_id` is an edge id.
 ///
-/// Server -> Edge. conn_id is the GUI id to be sent back with Configuration.
+/// Server -> Edge. `conn_id` is the GUI id to be sent back with Configuration.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ViewCameraConfig {
 	pub conn_id: ConnId,
@@ -80,13 +80,13 @@ pub struct ViewCameraConfig {
 // TODO: This should be split up.
 /// A struct containing a list of camera configuration data.
 ///
-/// Edge -> Server: Sending current config. conn_id is a GUI id.
+/// Edge -> Server: Sending current config. `conn_id` is a GUI id.
 ///
-/// Edge <- Server: Updating current config. conn_id is irrelevant.
+/// Edge <- Server: Updating current config. `conn_id` is irrelevant.
 ///
-/// GUI -> Server: Updating current config. conn_id is an edge id.
+/// GUI -> Server: Updating current config. `conn_id` is an edge id.
 ///
-/// GUI <- Server: Displaying current config. conn_id is an edge id.
+/// GUI <- Server: Displaying current config. `conn_id` is an edge id.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Configuration {
 	pub conn_id: ConnId,

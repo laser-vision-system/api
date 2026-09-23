@@ -10,7 +10,7 @@ use crate::shared::{
 
 /// Provides a list of Edges.
 ///
-/// GUI can request with ListEdges
+/// GUI can request with `ListEdges`
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfEdges {
 	pub edges: HashMap<String, String>,
@@ -32,11 +32,11 @@ pub struct SetEdgeProcessingType {
 
 /// Provides a list of cameras.
 ///
-/// GUI can request this with ListCameras
+/// GUI can request this with `ListCameras`
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfCameras {
 	// NOTE: Potentially outdated docstring?
-	/// hashmap has a structure of <(conn_id, camera_id), name>
+	/// hashmap has a structure of <(`conn_id`, `camera_id`), name>
 	pub cameras: HashMap<String, CameraDetails>,
 }
 
@@ -67,7 +67,7 @@ pub struct SetDefaultThreshold {
 
 /// The current default threshold values.
 ///
-/// Requested with GetDefaultThresholds.
+/// Requested with `GetDefaultThresholds`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct DefaultThresholds {
 	pub warn_below_threshold: Deviation,
