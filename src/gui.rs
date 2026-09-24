@@ -28,7 +28,7 @@ pub enum GUIRequests {
 
 	ForgetCamera(ForgetCamera),
 
-	ListProcessingTypes { processing_types: Vec<String> },
+	ProcessingTypes(ProcessingTypes),
 }
 
 /// These are all the commands the GUI can send the server - the should be sent in the same format as the MessageToGUI commands arrive.
