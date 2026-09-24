@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// {"Name": {"var": ..., ...}}
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[non_exhaustive]
 pub enum GUIRequests {
 	ListOfEdges(ListOfEdges),
 
@@ -33,6 +34,7 @@ pub enum GUIRequests {
 
 /// These are all the commands the GUI can send the server - the should be sent in the same format as the MessageToGUI commands arrive.
 #[derive(Serialize, Deserialize, Debug, Clone)]
+#[non_exhaustive]
 pub enum ServerRequests {
 	ListEdges,
 
