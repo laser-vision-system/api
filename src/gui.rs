@@ -3,10 +3,68 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+use crate::shared;
+use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest, VisionTechnique};
 
-use crate::shared::{
-	CameraId, CameraStatus, ConnId, Deviation, VisionTechnique,
-};
+/// These are messages sent to the GUI, sent as JSON in the following format:
+///
+/// {"Name": {"var": ..., ...}}
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum GUIRequests {
+	ListOfEdges (ListOfEdges),
+
+	ListOfCameras (ListOfCameras),
+
+	DefaultThresholds (DefaultThresholds),
+
+	ImageAnalysis (ImageAnalysis),
+
+	Alert (Alert),
+
+	Configuration (Configuration),
+
+	ForgetCamera (ForgetCamera),
+
+	ListProcessingTypes { processing_types: Vec<String> },
+}
+
+
+/// These are all the commands the GUI can send the server - the should be sent in the same format as the MessageToGUI commands arrive.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum ServerRequests {
+	ListEdges,
+
+	ListCameras,
+
+	ViewCameraConfig,
+
+	Configuration (shared::Configuration),
+
+	SetEdgeName (SetEdgeName),
+
+	SetEdgeProcessingType (SetEdgeProcessingType),
+
+	SetCameraThresholds (SetCameraThresholds),
+
+	SetDefaultThreshold (SetDefaultThreshold),
+
+	GetDefaultThresholds,
+
+	SetNameCamera (SetNameCamera),
+
+	StartViewingCamera (StartViewingCamera),
+
+	StopViewingCamera,
+
+	Setpoint (Setpoint),
+
+	ForgetCameraRequest (ForgetCameraRequest),
+
+	ForceRetryCamera (ForceRetryCamera),
+
+	ListProcessingTypes,
+}
+
 
 /// Provides a list of Edges.
 ///
@@ -74,21 +132,6 @@ pub struct DefaultThresholds {
 	pub alert_below_threshold: Deviation,
 }
 
-/// A notification that a camera has disconnected.
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CameraDisconnected {
-	pub conn_id: ConnId,
-	pub camera_id: CameraId,
-}
-
-/// A notification that a camera has connected.
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct CameraConnected {
-	pub conn_id: String,
-	pub camera_id: String,
-	pub camera_name: String,
-}
-
 /// A request to set the name of a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetNameCamera {
@@ -120,6 +163,28 @@ pub struct ImageAnalysis {
 	pub conn_id: String,
 	pub camera_id: CameraId,
 	pub deviation: Deviation,
+}
+
+/// A generic alert message - triggered either by an edge or the server
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Alert {
+	pub conn_id: Option<ConnId>,
+	pub camera_id: Option<CameraId>,
+	pub alert_code: u32,
+	pub alert_type: String,
+	pub alert_description: String,
+}
+
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForceRetryCamera {
+	pub conn_id: ConnId,
+	pub camera_id: CameraId,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ProcessingTypes {
+	pub processing_types: Vec<String>,
 }
 
 // Structs to allow the server to send data to the GUI with IDs in string

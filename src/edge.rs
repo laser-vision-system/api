@@ -4,15 +4,41 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::shared::{
-	CameraId, CameraStatus, Configuration, ConnId, Deviation, ViewCameraConfig,
-	VisionTechnique,
-};
+use crate::shared::{CameraId, CameraStatus, Configuration, ConnId, Deviation, ForgetCameraRequest, ViewCameraConfig, VisionTechnique};
 
+/// The different types of requests the edge will get.
+#[expect(clippy::module_name_repetitions, reason = "Not confusing")]
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct ErrorMSG {
-	pub code: String,
-	pub message: String,
+#[repr(u8)]
+#[non_exhaustive]
+pub enum EdgeRequests {
+	SetNameCamera(SetNameCamera),
+	StartViewingCamera(StartViewingCamera),
+	StopViewingCamera(StopViewingCamera),
+	Configuration(Configuration),
+	ViewCameraConfig(ViewCameraConfig),
+	Setpoint(Setpoint),
+	SetProcessingType(SetProcessingType),
+	ForceRetryCamera(ForceRetryCamera)
+}
+
+/// The different types of requests the edge can send the server
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[non_exhaustive]
+pub enum ServerRequests {
+	InitialiseConnection(InitialiseConnection),
+
+	RegisterCameras(RegisterCameras),
+
+	UpdateCameraStatus(UpdateCameraStatus),
+
+	ImageAnalysis(ImageAnalysis),
+
+	Configuration(Configuration),
+
+	ForgetCameraRequest(ForgetCameraRequest),
+
+	Alert(Alert),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -92,22 +118,6 @@ pub struct ImageAnalysis {
 
 // == Requests ==
 
-/// The different types of requests the edge will get.
-///
-/// Not intended to be sent to the edge itself.
-#[expect(clippy::module_name_repetitions, reason = "Not confusing")]
-#[derive(Clone, Debug)]
-#[repr(u8)]
-#[non_exhaustive]
-pub enum EdgeRequests {
-	SetNameCamera(SetNameCamera),
-	StartViewingCamera(StartViewingCamera),
-	StopViewingCamera(StopViewingCamera),
-	Configuration(Configuration),
-	ViewCameraConfig(ViewCameraConfig),
-	Setpoint(Setpoint),
-	SetProcessingType(SetProcessingType),
-}
 
 /// A request to change the name of a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -140,4 +150,19 @@ pub struct Setpoint {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SetProcessingType {
 	pub processing_type: VisionTechnique,
+}
+
+/// A generic alert, which the server will forward to any GUI's
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Alert {
+	pub camera_id: Option<CameraId>,
+	pub alert_code: u32,
+	pub alert_type: String,
+	pub alert_description: String,
+}
+
+/// Force the edge to retry connecting to a broken camera
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForceRetryCamera {
+	pub camera_id: CameraId,
 }
