@@ -2,32 +2,34 @@
 
 use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
 use crate::shared;
-use crate::shared::{CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest, VisionTechnique};
+use crate::shared::{
+	CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest,
+	VisionTechnique,
+};
+use serde::{Deserialize, Serialize};
 
 /// These are messages sent to the GUI, sent as JSON in the following format:
 ///
 /// {"Name": {"var": ..., ...}}
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum GUIRequests {
-	ListOfEdges (ListOfEdges),
+	ListOfEdges(ListOfEdges),
 
-	ListOfCameras (ListOfCameras),
+	ListOfCameras(ListOfCameras),
 
-	DefaultThresholds (DefaultThresholds),
+	DefaultThresholds(DefaultThresholds),
 
-	ImageAnalysis (ImageAnalysis),
+	ImageAnalysis(ImageAnalysis),
 
-	Alert (Alert),
+	Alert(Alert),
 
-	Configuration (Configuration),
+	Configuration(Configuration),
 
-	ForgetCamera (ForgetCamera),
+	ForgetCamera(ForgetCamera),
 
 	ListProcessingTypes { processing_types: Vec<String> },
 }
-
 
 /// These are all the commands the GUI can send the server - the should be sent in the same format as the MessageToGUI commands arrive.
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -38,33 +40,32 @@ pub enum ServerRequests {
 
 	ViewCameraConfig,
 
-	Configuration (shared::Configuration),
+	Configuration(shared::Configuration),
 
-	SetEdgeName (SetEdgeName),
+	SetEdgeName(SetEdgeName),
 
-	SetEdgeProcessingType (SetEdgeProcessingType),
+	SetEdgeProcessingType(SetEdgeProcessingType),
 
-	SetCameraThresholds (SetCameraThresholds),
+	SetCameraThresholds(SetCameraThresholds),
 
-	SetDefaultThreshold (SetDefaultThreshold),
+	SetDefaultThreshold(SetDefaultThreshold),
 
 	GetDefaultThresholds,
 
-	SetNameCamera (SetNameCamera),
+	SetNameCamera(SetNameCamera),
 
-	StartViewingCamera (StartViewingCamera),
+	StartViewingCamera(StartViewingCamera),
 
 	StopViewingCamera,
 
-	Setpoint (Setpoint),
+	Setpoint(Setpoint),
 
-	ForgetCameraRequest (ForgetCameraRequest),
+	ForgetCameraRequest(ForgetCameraRequest),
 
-	ForceRetryCamera (ForceRetryCamera),
+	ForceRetryCamera(ForceRetryCamera),
 
 	ListProcessingTypes,
 }
-
 
 /// Provides a list of Edges.
 ///
@@ -174,7 +175,6 @@ pub struct Alert {
 	pub alert_type: String,
 	pub alert_description: String,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForceRetryCamera {

@@ -4,7 +4,10 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::shared::{CameraId, CameraStatus, Configuration, ConnId, Deviation, ForgetCameraRequest, ViewCameraConfig, VisionTechnique};
+use crate::shared::{
+	CameraId, CameraStatus, Configuration, ConnId, Deviation,
+	ForgetCameraRequest, ViewCameraConfig, VisionTechnique,
+};
 
 /// The different types of requests the edge will get.
 #[expect(clippy::module_name_repetitions, reason = "Not confusing")]
@@ -19,7 +22,7 @@ pub enum EdgeRequests {
 	ViewCameraConfig(ViewCameraConfig),
 	Setpoint(Setpoint),
 	SetProcessingType(SetProcessingType),
-	ForceRetryCamera(ForceRetryCamera)
+	ForceRetryCamera(ForceRetryCamera),
 }
 
 /// The different types of requests the edge can send the server
@@ -117,7 +120,6 @@ pub struct ImageAnalysis {
 }
 
 // == Requests ==
-
 
 /// A request to change the name of a camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
