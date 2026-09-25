@@ -1,7 +1,7 @@
 //! Datatypes used for GUI communication.
 
 use std::collections::HashMap;
-
+use strum::IntoEnumIterator;
 use crate::shared;
 use crate::shared::{
 	CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest,
@@ -187,6 +187,16 @@ pub struct ForceRetryCamera {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ProcessingTypes {
 	pub processing_types: Vec<String>,
+}
+
+impl Default for ProcessingTypes {
+	fn default() -> Self {
+		let mut processing_types = vec![];
+		for technique in VisionTechnique::iter() {
+			processing_types.push(format!("{:?}", technique));
+		}
+		ProcessingTypes { processing_types }
+	}
 }
 
 // Structs to allow the server to send data to the GUI with IDs in string
