@@ -23,6 +23,7 @@ pub enum EdgeRequests {
 	Setpoint(Setpoint),
 	SetProcessingType(SetProcessingType),
 	ForceRetryCamera(ForceRetryCamera),
+	ForgetCameraRequest(ForgetCameraRequest),
 }
 
 /// The different types of requests the edge can send the server

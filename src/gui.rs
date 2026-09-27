@@ -40,7 +40,7 @@ pub enum ServerRequests {
 
 	ListCameras,
 
-	ViewCameraConfig,
+	ViewCameraConfig(shared::ViewCameraConfig),
 
 	Configuration(shared::Configuration),
 
