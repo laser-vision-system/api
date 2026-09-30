@@ -36,7 +36,9 @@ pub enum CameraStatus {
 /// Which machine vision approach will be used.
 ///
 /// This selection applies to the entire μ-com device.
-#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, EnumIter)]
+#[derive(
+	Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, EnumIter,
+)]
 #[repr(u8)]
 #[non_exhaustive]
 pub enum VisionTechnique {

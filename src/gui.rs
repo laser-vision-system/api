@@ -1,13 +1,13 @@
 //! Datatypes used for GUI communication.
 
-use std::collections::HashMap;
-use strum::IntoEnumIterator;
 use crate::shared;
 use crate::shared::{
 	CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest,
 	VisionTechnique,
 };
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use strum::IntoEnumIterator;
 
 /// These are messages sent to the GUI, sent as JSON in the following format:
 ///
