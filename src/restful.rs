@@ -2,7 +2,7 @@
 #![expect(clippy::doc_markdown, reason = "RESTful is not a code identifier")]
 
 use std::collections::HashSet;
-
+use crate::edge::Settings;
 use serde::{Deserialize, Serialize};
 
 /// Post structure for `/edge_logs`.
@@ -14,5 +14,5 @@ pub struct Logs {
 /// Post structure for `/write_default_config`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
-	pub json: String,
+	pub settings: Settings,
 }
