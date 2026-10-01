@@ -106,8 +106,10 @@ pub struct ListOfCameras {
 pub struct CameraDetails {
 	pub name: String,
 	pub state: CameraStatus,
-	pub warn_below_threshold: f32,
-	pub alert_below_threshold: f32,
+	pub warn_below_threshold: Deviation,
+	pub alert_below_threshold: Deviation,
+	pub warn_above_threshold: Deviation,
+	pub alert_above_threshold: Deviation,
 }
 
 /// A request to change the thresholds for a camera.
@@ -117,6 +119,8 @@ pub struct SetCameraThresholds {
 	pub camera_id: CameraId,
 	pub warn_below_threshold: Deviation,
 	pub alert_below_threshold: Deviation,
+	pub warn_above_threshold: Deviation,
+	pub alert_above_threshold: Deviation,
 }
 
 /// A request to change the default threshold.
@@ -124,6 +128,8 @@ pub struct SetCameraThresholds {
 pub struct SetDefaultThreshold {
 	pub warn_below_threshold: Deviation,
 	pub alert_below_threshold: Deviation,
+	pub warn_above_threshold: Deviation,
+	pub alert_above_threshold: Deviation,
 }
 
 /// The current default threshold values.
@@ -133,6 +139,8 @@ pub struct SetDefaultThreshold {
 pub struct DefaultThresholds {
 	pub warn_below_threshold: Deviation,
 	pub alert_below_threshold: Deviation,
+	pub warn_above_threshold: Deviation,
+	pub alert_above_threshold: Deviation,
 }
 
 /// A request to set the name of a camera.
