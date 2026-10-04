@@ -43,6 +43,8 @@ pub enum ServerRequests {
 	ForgetCameraRequest(ForgetCameraRequest),
 
 	Alert(Alert),
+
+	SetNameCamera(SetNameCamera),
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
