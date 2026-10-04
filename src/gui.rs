@@ -17,6 +17,8 @@ use strum::IntoEnumIterator;
 pub enum GUIRequests {
 	ListOfEdges(ListOfEdges),
 
+	DisconnectedEdges(DisconnectedEdges),
+
 	ListOfCameras(ListOfCameras),
 
 	DefaultThresholds(DefaultThresholds),
@@ -32,11 +34,13 @@ pub enum GUIRequests {
 	ProcessingTypes(ProcessingTypes),
 }
 
-/// These are all the commands the GUI can send the server - the should be sent in the same format as the MessageToGUI commands arrive.
+/// These are all the commands the GUI can send the server - they should be sent in the same format as the MessageToGUI commands arrive.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[non_exhaustive]
 pub enum ServerRequests {
 	ListEdges,
+
+	ListDisconnectedEdges,
 
 	ListCameras,
 
@@ -62,6 +66,8 @@ pub enum ServerRequests {
 
 	Setpoint(Setpoint),
 
+	ForgetEdge(ForgetEdge),
+
 	ForgetCameraRequest(ForgetCameraRequest),
 
 	ForceRetryCamera(ForceRetryCamera),
@@ -75,6 +81,20 @@ pub enum ServerRequests {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ListOfEdges {
 	pub edges: HashMap<String, String>,
+}
+
+/// Provides a list of disconnected Edges
+///
+/// GUI can request with 'ListDisconnectedEdges'
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DisconnectedEdges {
+	pub edges: HashMap<String, String>,
+}
+
+/// Tells the server to forget a disconnected Edge
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgetEdge {
+	pub conn: ConnId,
 }
 
 /// A request to change the name of an Edge.
