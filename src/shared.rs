@@ -42,8 +42,8 @@ pub enum CameraStatus {
 #[repr(u8)]
 #[non_exhaustive]
 pub enum VisionTechnique {
-	Empty,
-	Demonstration,
+	Inactive,
+	AvgLightness,
 	Diff,
 	Cnn,
 }
