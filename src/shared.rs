@@ -55,7 +55,6 @@ pub enum VisionTechnique {
 /// The GUI will initiate the request, which the server will forward to the
 /// Edge. The Edge will confirm the request to forget about the camera and
 /// return this.
-///
 // TODO: Is this outdated?
 /// When a server becomes disconnected, the client can send one of these
 /// commands, and if the response comes back with 'confirm' as true, it means

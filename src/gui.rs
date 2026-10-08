@@ -1,13 +1,17 @@
 //! Datatypes used for GUI communication.
 
-use crate::shared;
-use crate::shared::{
-	CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest,
-	VisionTechnique,
-};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
+
+use crate::{
+	shared,
+	shared::{
+		CameraId, CameraStatus, ConnId, Deviation, ForgetCameraRequest,
+		VisionTechnique,
+	},
+};
 
 /// These are messages sent to the GUI, sent as JSON in the following format:
 ///
@@ -34,7 +38,8 @@ pub enum GUIRequests {
 	ProcessingTypes(ProcessingTypes),
 }
 
-/// These are all the commands the GUI can send the server - they should be sent in the same format as the MessageToGUI commands arrive.
+/// These are all the commands the GUI can send the server - they should be sent
+/// in the same format as the MessageToGUI commands arrive.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[non_exhaustive]
 pub enum ServerRequests {

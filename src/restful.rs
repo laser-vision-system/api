@@ -2,8 +2,10 @@
 #![expect(clippy::doc_markdown, reason = "RESTful is not a code identifier")]
 
 use std::collections::HashSet;
-use crate::edge::Settings;
+
 use serde::{Deserialize, Serialize};
+
+use crate::edge::Settings;
 
 /// Post structure for `/edge_logs`.
 #[derive(Serialize, Deserialize, Debug, Clone)]
