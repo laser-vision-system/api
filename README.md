@@ -1,5 +1,5 @@
-# Server Edge Datatypes
+# API
 
-Holds the datatypes that are used for communication between the server and edge.
+Holds the datatypes that are used for communications with the Server.
 
 To enable the pre-commit hook, run `git config core.hooksPath .githooks`.
