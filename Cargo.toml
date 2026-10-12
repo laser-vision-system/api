@@ -1,5 +1,5 @@
 [package]
-name = "server-edge-datatypes"
+name = "api"
 version = "0.1.0"
 edition = "2024"
 

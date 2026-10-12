@@ -3,6 +3,15 @@
 version = 4
 
 [[package]]
+name = "api"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "strum",
+ "strum_macros",
+]
+
+[[package]]
 name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -54,15 +63,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.3",
-]
-
-[[package]]
-name = "server-edge-datatypes"
-version = "0.1.0"
-dependencies = [
- "serde",
- "strum",
- "strum_macros",
 ]
 
 [[package]]
