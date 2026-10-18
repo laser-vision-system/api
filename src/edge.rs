@@ -16,8 +16,7 @@ use crate::shared::{
 #[non_exhaustive]
 pub enum EdgeRequests {
 	SetNameCamera(SetNameCamera),
-	StartViewingCamera(StartViewingCamera),
-	StopViewingCamera(StopViewingCamera),
+	ToggleViewingCamera(ToggleViewingCamera),
 	Configuration(Configuration),
 	ViewCameraConfig(ViewCameraConfig),
 	Setpoint(Setpoint),
@@ -131,18 +130,11 @@ pub struct SetNameCamera {
 	pub name: String,
 }
 
-/// A request to start sending images.
+/// A request to start or stop sending images from a specific camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct StartViewingCamera {
+pub struct ToggleViewingCamera {
 	pub camera_id: CameraId,
-}
-
-/// Tells the edge to stop sending the camera feed.
-///
-/// Only sent when no more GUIs are watching the given camera feed.
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct StopViewingCamera {
-	pub camera_id: CameraId,
+	pub start_viewing: bool,
 }
 
 /// A request to calibrate the setpoint on the next measurement.
