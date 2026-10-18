@@ -48,6 +48,14 @@ pub enum VisionTechnique {
 	Cnn,
 }
 
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(u8)]
+pub enum AlertType {
+	Warning,
+	Error,
+	Confirmation,
+}
+
 // == Round trip ==
 
 /// A request to forget about a camera.

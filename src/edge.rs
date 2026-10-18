@@ -4,10 +4,7 @@ use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
-use crate::shared::{
-	CameraId, CameraStatus, Configuration, ConnId, Deviation,
-	ForgetCameraRequest, ViewCameraConfig, VisionTechnique,
-};
+use crate::shared::{AlertType, CameraId, CameraStatus, Configuration, ConnId, Deviation, ForgetCameraRequest, ViewCameraConfig, VisionTechnique};
 
 /// The different types of requests the edge will get.
 #[expect(clippy::module_name_repetitions, reason = "Not confusing")]
@@ -153,8 +150,9 @@ pub struct SetProcessingType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Alert {
 	pub camera_id: Option<CameraId>,
+	pub alert_type: AlertType,
 	pub alert_code: u32,
-	pub alert_type: String,
+	pub alert_name: String,
 	pub alert_description: String,
 }
 

@@ -12,6 +12,7 @@ use crate::{
 		VisionTechnique,
 	},
 };
+use crate::shared::AlertType;
 
 /// These are messages sent to the GUI, sent as JSON in the following format:
 ///
@@ -206,8 +207,9 @@ pub struct ImageAnalysis {
 pub struct Alert {
 	pub conn_id: Option<ConnId>,
 	pub camera_id: Option<CameraId>,
+	pub alert_type: AlertType,
 	pub alert_code: u32,
-	pub alert_type: String,
+	pub alert_name: String,
 	pub alert_description: String,
 }
 
