@@ -3,7 +3,6 @@
 use std::{collections::HashMap, time::Duration};
 
 use serde::{Deserialize, Serialize};
-
 use crate::shared::{AlertType, CameraId, CameraStatus, Configuration, ConnId, Deviation, ForgetCameraRequest, ViewCameraConfig, VisionTechnique};
 
 /// The different types of requests the edge will get.
@@ -12,6 +11,7 @@ use crate::shared::{AlertType, CameraId, CameraStatus, Configuration, ConnId, De
 #[repr(u8)]
 #[non_exhaustive]
 pub enum EdgeRequests {
+	IsCameraCalibrated(IsCameraCalibrated),
 	SetNameCamera(SetNameCamera),
 	ToggleViewingCamera(ToggleViewingCamera),
 	Configuration(Configuration),
@@ -26,6 +26,10 @@ pub enum EdgeRequests {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[non_exhaustive]
 pub enum ServerRequests {
+	CameraCalibrationStatus(CameraCalibrationStatus),
+
+	CameraCalibrationUpdate(CameraCalibrationUpdate),
+
 	InitialiseConnection(InitialiseConnection),
 
 	RegisterCameras(RegisterCameras),
@@ -46,6 +50,48 @@ pub enum ServerRequests {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitialiseConnection {
 	pub edge_id: ConnId,
+}
+
+/// Indicated whether a camera is calibrated.
+///
+/// Conn_id should be the Conn_id sent with the IsCameraCalibrated command.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CameraCalibrationStatus {
+	pub gui_id: ConnId,
+	pub camera_id: CameraId,
+	pub calibrated: bool,
+}
+
+impl CameraCalibrationStatus{
+	#[expect(
+		clippy::needless_pass_by_value,
+		reason = "This is a consuming function"
+	)]
+	/// Convert a [`IsCameraCalibrated`] into a [`CameraCalibrationStatus`].
+	// TODO: Move to a method on ViewCameraConfig.
+	pub fn build_response(request: IsCameraCalibrated, response: bool) -> Self {
+		Self {
+			gui_id: request.gui_id,
+			camera_id: request.camera_id,
+			calibrated: response,
+		}
+	}
+}
+
+
+/// Requests the calibration status of a given camera.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct IsCameraCalibrated {
+	pub gui_id: ConnId,
+	pub camera_id: CameraId,
+
+}
+
+/// Indicates that a camera has changed its calibration status.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CameraCalibrationUpdate {
+	pub camera_id: CameraId,
+	pub calibrated: bool,
 }
 
 /// Information about a newly instantiated device.
