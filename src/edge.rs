@@ -57,7 +57,7 @@ pub struct InitialiseConnection {
 /// Conn_id should be the Conn_id sent with the IsCameraCalibrated command.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CameraCalibrationStatus {
-	pub conn_id: ConnId,
+	pub gui_id: ConnId,
 	pub camera_id: CameraId,
 	pub calibrated: bool,
 }
@@ -65,7 +65,7 @@ pub struct CameraCalibrationStatus {
 /// Requests the calibration status of a given camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct IsCameraCalibrated {
-	pub conn_id: ConnId,
+	pub gui_id: ConnId,
 	pub camera_id: CameraId,
 
 }
