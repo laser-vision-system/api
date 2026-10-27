@@ -62,6 +62,23 @@ pub struct CameraCalibrationStatus {
 	pub calibrated: bool,
 }
 
+impl CameraCalibrationStatus{
+	#[expect(
+		clippy::needless_pass_by_value,
+		reason = "This is a consuming function"
+	)]
+	/// Convert a [`IsCameraCalibrated`] into a [`CameraCalibrationStatus`].
+	// TODO: Move to a method on ViewCameraConfig.
+	pub fn build_response(request: IsCameraCalibrated, response: bool) -> Self {
+		Self {
+			gui_id: request.gui_id,
+			camera_id: request.camera_id,
+			calibrated: response,
+		}
+	}
+}
+
+
 /// Requests the calibration status of a given camera.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct IsCameraCalibrated {
