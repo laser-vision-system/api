@@ -20,6 +20,8 @@ use crate::shared::AlertType;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[non_exhaustive]
 pub enum GUIRequests {
+	CameraCalibrationStatus(CameraCalibrationStatus),
+
 	ListOfEdges(ListOfEdges),
 
 	DisconnectedEdges(DisconnectedEdges),
@@ -50,6 +52,8 @@ pub enum ServerRequests {
 
 	ListCameras,
 
+	IsCameraCalibrated(IsCameraCalibrated),
+
 	ViewCameraConfig(shared::ViewCameraConfig),
 
 	Configuration(shared::Configuration),
@@ -79,6 +83,26 @@ pub enum ServerRequests {
 	ForceRetryCamera(ForceRetryCamera),
 
 	ListProcessingTypes,
+}
+
+/// Requests the calibration status of a given camera.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct IsCameraCalibrated {
+    pub conn_id: ConnId,
+    pub camera_id: CameraId,
+
+}
+
+/// Indicated whether a camera is calibrated.
+///
+/// Can be requested with `IsCameraCalibrated`,
+/// and will send automatically upon any change in
+/// status.
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CameraCalibrationStatus {
+	pub conn_id: ConnId,
+	pub camera_id: CameraId,
+    pub calibrated: bool,
 }
 
 /// Provides a list of Edges.
